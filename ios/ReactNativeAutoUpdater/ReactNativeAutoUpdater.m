@@ -444,6 +444,20 @@ static bool isFirstAccess = YES;
 }
 
 -(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
+    
+    NSURLResponse *urlResponse = downloadTask.response;
+    if([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)urlResponse;
+        if(httpResponse.statusCode >= 400) {
+            if(self.showProgress) {
+                [StatusBarNotification showWithMessage:NSLocalizedString(@"Download Failed", nil)
+                                       backgroundColor:[StatusBarNotification errorColor]
+                                              autoHide:YES];
+            }
+            return;
+        }
+    }
+    
     if (self.showProgress) {
         [StatusBarNotification showWithMessage:NSLocalizedString(@"Download Complete.", nil)
                                backgroundColor:[StatusBarNotification successColor]
