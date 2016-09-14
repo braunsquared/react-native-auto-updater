@@ -94,6 +94,8 @@ static bool isFirstAccess = YES;
 
 
 - (void)showWithMessage:(NSString*)message backgroundColor:(UIColor*)bgColor autoHide:(BOOL)autoHide{
+    NSLog(@"Progress: %@", message);
+    
   dispatch_async(dispatch_get_main_queue(), ^{
     if (self.currentlyShowing) {
       [self.timer invalidate];
